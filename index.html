@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>彩票模拟器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .numbers {
+            font-size: 24px;
+            margin: 20px 0;
+            height: 30px; /* Fixed height to prevent pushing the button down */
+        }
+        .button {
+            padding: 10px 20px;5
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .log {
+            margin-top: 30px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: calc(100vh - 300px); /* Adjust the height to extend to the bottom */
+            overflow-y: scroll;
+            text-align: left;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>摇号模拟器</h1>
+    <div class="numbers" id="numbers"></div>
+    <button class="button" onclick="generateNumbers()">生成号码</button>
+    <div class="log">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>记录</h2>
+            <button class="button" onclick="downloadLog()">下载记录</button>
+        </div>
+        <table id="logTable">
+            <thead>
+                <tr>
+                    <th>模拟次数</th>
+                    <th>前区号码</th>
+                    <th>后区号码</th>
+                </tr>
+            </thead>
+            <tbody id="log"></tbody>
+        </table>
+    </div>
+
+    <script>
+        let simulationCount = 0;
+
+        function generateNumbers() {
+            const frontNumbers = [];
+            const backNumbers = [];
+
+            // 生成前五个号码
+            while (frontNumbers.length < 5) {
+                const num = Math.floor(Math.random() * 35) + 1;
+                if (!frontNumbers.includes(num)) {
+                    frontNumbers.push(num);
+                }
+            }
+            frontNumbers.sort((a, b) => a - b); // 从小到大排列
+
+            // 生成后两个号码
+            while (backNumbers.length < 2) {
+                const num = Math.floor(Math.random() * 12) + 1;
+                if (!backNumbers.includes(num)) {
+                    backNumbers.push(num);
+                }
+            }
+            backNumbers.sort((a, b) => a - b); // 从小到大排列
+
+            // 显示号码
+            const numbersText = '前区号码: ' + frontNumbers.join(', ') + ' | 后区号码: ' + backNumbers.join(', ');
+            document.getElementById('numbers').innerText = numbersText;
+
+            // 记录生成的号码
+            simulationCount++;
+            const logTable = document.getElementById('log');
+            const logEntry = document.createElement('tr');
+            const countCell = document.createElement('td');
+            const frontNumbersCell = document.createElement('td');
+            const backNumbersCell = document.createElement('td');
+            countCell.innerText = simulationCount;
+            frontNumbersCell.innerText = frontNumbers.join(' ');
+            backNumbersCell.innerText = backNumbers.join(' ');
+            logEntry.appendChild(countCell);
+            logEntry.appendChild(frontNumbersCell);
+            logEntry.appendChild(backNumbersCell);
+            logTable.insertBefore(logEntry, logTable.firstChild); // 插入到表格顶部
+            console.log(numbersText);
+        }
+
+        function downloadLog() {
+            const logTable = document.getElementById('logTable');
+            let txtContent = "";
+            const rows = logTable.querySelectorAll('tr');
+            rows.forEach(row => {
+                const cols = row.querySelectorAll('th, td');
+                const rowData = Array.from(cols).map(col => col.innerText).join(' ');
+                txtContent += rowData + "\r\n";
+            });
+
+            const encodedUri = encodeURI("data:text/plain;charset=utf-8," + txtContent);
+            const link = document.createElement('a');
+            link.setAttribute('href', encodedUri);
+            link.setAttribute('download', 'lottery_log.txt');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
