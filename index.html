@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>彩票模拟器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .numbers {
+            font-size: 24px;
+            margin: 20px 0;
+            height: 30px; /* Fixed height to prevent pushing the button down */
+        }
+        .button {
+            padding: 10px 20px;5
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .log {
+            margin-top: 30px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            height: calc(100vh - 300px); /* Adjust the height to extend to the bottom */
+            overflow-y: scroll;
+            text-align: left;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }5
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>摇号模拟器</h1>5
+    <div class="numbers" id="numbers"></div>
+    <button class="button" onclick="generateNumbers()">生成号码</button>
+    <button class="button" id="autoClickerButton" onclick="toggleAutoClicker()">连点器开关</button> <!-- Auto-clicker switch -->
+    <div id="coinBalance">金币: 0</div> <!-- Display for coin balance -->
+    <div class="log">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>记录</h2>
+            <button class="button" onclick="downloadLog()">下载记录</button>
+        </div>
+        <table id="logTable">
+            <thead>
+                <tr>
+                    <th>模拟次数</th>
+                    <th>前区号码</th>
+                    <th>后区号码</th>
+                </tr>
+            </thead>
+            <tbody id="log"></tbody>
+        </table>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
